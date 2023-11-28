@@ -1,20 +1,17 @@
+const batter = document.getElementById("batter");
 const skillet = document.getElementById("skillet");
-let skilletCooking;
+const pancake = document.getElementById("pancake");
 
-function skilletLid() {
-	console.log(skillet);
-	switch (skillet.innerText) {
-		case "OPEN":
-			skillet.children.forEach(pancake => {
-				
-			});
-			skilletCooking = skillet.children;
-			skillet.innerText = "CLOSED";
-			break;
-		case "CLOSED":
-			skillet.innerText = "OPEN";
-			break;
-	}
-}
+/**
+ * Tracks state of equipable tools
+ * 
+ * 0: Not Equipped / 1: Equipped, Droppable / 2: Equipped, in use
+ */
+let userState = {
+	spatula: 0,
+	ladel: 0
+};
 
-skillet.addEventListener("click", skilletLid);
+
+
+skillet.addEventListener("click", );

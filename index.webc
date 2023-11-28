@@ -13,7 +13,6 @@
 	<div id="skillet">
 		OPEN
 		<div id="pancake"></div>
-		<div id="pancake"></div>
 	</div>
 	<script src="pancakes.js"></script>
 	<script @raw="getBundle('js')" webc:keep></script>
