@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" href="style.css">
+	<style @raw="getBundle('css')" webc:keep></style>
+</head>
+<body>
+	<h1>Hello, world!</h1>
+	<div id="batter"></div>
+	<div id="skillet">
+		OPEN
+		<div id="pancake"></div>
+		<div id="pancake"></div>
+	</div>
+	<script src="pancakes.js"></script>
+	<script @raw="getBundle('js')" webc:keep></script>
+</body>
+</html>
