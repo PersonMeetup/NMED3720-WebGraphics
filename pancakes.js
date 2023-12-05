@@ -18,6 +18,11 @@ let pancake, skilletCooking, stoveWaiting;
 let stoveClicked = false;
 let pancakeTally = 0;
 
+/**
+ * Tracks state of equipable tools
+ * 
+ * 0: Not Equipped / 1: Equipped, Droppable / 2: Equipped, in use
+ */
 let userState = {
 	spatula: 0,
 	ladel: 0
