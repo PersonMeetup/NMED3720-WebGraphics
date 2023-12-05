@@ -9,12 +9,12 @@
 </head>
 <body>
 	<h1>Hello, world!</h1>
+	<p>Total Pancakes: <span id="tally">0</span></p>
+	<button id="spatula">Spatula Unequipped</button>
+	<button id="ladel">Ladel Unequipped</button>
 	<div id="batter"></div>
-	<div id="skillet">
-		OPEN
-		<div id="pancake"></div>
-		<div id="pancake"></div>
-	</div>
+	<div id="skillet"></div>
+	<button id="stove">Pretend This Is A Stove</button>
 	<script src="pancakes.js"></script>
 	<script @raw="getBundle('js')" webc:keep></script>
 </body>
