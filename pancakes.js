@@ -28,19 +28,9 @@ let userState = {
 	ladel: 0
 };
 
-async function stoveClick() {
-	if (toolCheck('spatula', 1)) {
-		clearTimeout(stoveWaiting);
-		stoveClicked = true;
-		stoveWaiting = setTimeout(function() {
-			stoveClicked = false;
-		}, 4000);
-	}
-}
-
 function toolCheck(key, target) {
 	const value = userState[key];
-	if (value == target)
+	if (value >= target)
 		return true;
 	return false;
 }
@@ -63,6 +53,41 @@ function equip(tool, target = 1) {
 		return true;
 	} else {
 		return false;
+	}
+}
+
+function spatulaClick() {
+	equip('spatula');
+
+	if (userState.spatula == 1)
+		spatula.innerText = "Spatula Equipped";
+	else if (userState.spatula == 0)
+		spatula.innerText = 'Spatula Unequipped'
+}
+function ladelClick() {
+	equip('ladel');
+
+	if (userState.ladel == 1)
+		ladel.innerText = "Ladel Equipped";
+	else if (userState.ladel == 0)
+		ladel.innerText = 'Ladel Unequipped'
+}
+function batterClick() {
+	equip('ladel', 2);
+
+	if (userState.ladel == 2)
+		ladel.innerText = "Ladel Filled with Batter";
+	else if (userState.ladel == 1)
+		ladel.innerText = 'Ladel Equipped'
+};
+
+async function stoveClick() {
+	if (toolCheck('spatula', 1)) {
+		clearTimeout(stoveWaiting);
+		stoveClicked = true;
+		stoveWaiting = setTimeout(function() {
+			stoveClicked = false;
+		}, 4000);
 	}
 }
 
@@ -156,30 +181,11 @@ function pancakeCook() {
 		pancake.setAttribute('data-cooked-top', currentTime);
 }
 
-spatula.addEventListener('click', function() {
-	equip('spatula');
 
-	if (userState.spatula == 1)
-		spatula.innerText = "Spatula Equipped";
-	else if (userState.spatula == 0)
-		spatula.innerText = 'Spatula Unequipped'
-});
-ladel.addEventListener('click', function() {
-	equip('ladel');
 
-	if (userState.ladel == 1)
-		ladel.innerText = "Ladel Equipped";
-	else if (userState.ladel == 0)
-		ladel.innerText = 'Ladel Unequipped'
-});
-batter.addEventListener('click', function() {
-	equip('ladel', 2);
-
-	if (userState.ladel == 2)
-		ladel.innerText = "Ladel Filled with Batter";
-	else if (userState.ladel == 1)
-		ladel.innerText = 'Ladel Equipped'
-});
+spatula.addEventListener('click', spatulaClick);
+ladel.addEventListener('click', ladelClick);
+batter.addEventListener('click', batterClick);
 
 skillet.addEventListener("click", panFill);
 stove.addEventListener('click', stoveClick);
