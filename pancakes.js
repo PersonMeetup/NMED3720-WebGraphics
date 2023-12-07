@@ -1,12 +1,9 @@
 // Sourced from https://webtips.dev/webtips/javascript/how-to-clamp-numbers-in-javascript
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
-const spatula = document.getElementById('spatula');
-const ladel = document.getElementById('ladel');
+// const spatula = document.getElementById('spatula');
+const ladle = document.getElementById('ladle');
 
-const batter = document.getElementById("batter");
-const skillet = document.getElementById("skillet");
-const stove = document.getElementById('stove');
 const tally = document.getElementById('tally');
 
 // Timings for pancake cooking (ms)
@@ -14,8 +11,14 @@ const pancakeMaxTime = 3000;
 const pancakeGoldUpper = 2000;
 const pancakeGoldLower = 1200;
 
-let pancake, skilletCooking, stoveWaiting;
+let skilletCooking, stoveWaiting;
 let stoveClicked = false;
+
+let pancake = {
+	currentSide: '',
+	cookedBot: 0,
+	cookedTop: 0
+};
 let pancakeTally = 0;
 
 /**
@@ -25,7 +28,7 @@ let pancakeTally = 0;
  */
 let userState = {
 	spatula: 0,
-	ladel: 0
+	ladle: 0
 };
 
 function toolCheck(key, target) {
@@ -38,7 +41,7 @@ function toolCheck(key, target) {
 function equip(tool, target = 1) {
 	for (const key in userState) {
 		if (toolCheck(key, target)) {
-			if (key == tool) {
+			if ((key == tool) && !(userState[tool] > target)) {
 				userState[tool] -= 1;
 				// Display scripts
 				return true;
@@ -56,31 +59,6 @@ function equip(tool, target = 1) {
 	}
 }
 
-function spatulaClick() {
-	equip('spatula');
-
-	if (userState.spatula == 1)
-		spatula.innerText = "Spatula Equipped";
-	else if (userState.spatula == 0)
-		spatula.innerText = 'Spatula Unequipped'
-}
-function ladelClick() {
-	equip('ladel');
-
-	if (userState.ladel == 1)
-		ladel.innerText = "Ladel Equipped";
-	else if (userState.ladel == 0)
-		ladel.innerText = 'Ladel Unequipped'
-}
-function batterClick() {
-	equip('ladel', 2);
-
-	if (userState.ladel == 2)
-		ladel.innerText = "Ladel Filled with Batter";
-	else if (userState.ladel == 1)
-		ladel.innerText = 'Ladel Equipped'
-};
-
 async function stoveClick() {
 	if (toolCheck('spatula', 1)) {
 		clearTimeout(stoveWaiting);
@@ -92,21 +70,14 @@ async function stoveClick() {
 }
 
 function panFill() {
-	if (skillet.firstElementChild)
-		return false;
-	if (toolCheck("ladel", 2)) {
-		equip("ladel", 2);
-		ladel.innerText = "Ladel Equipped";
+	if (!pancake.currentSide && toolCheck("ladle", 2)) {
+		equip("ladle", 2);
+		equipImage('ladle')
 
-		// Create pancake object (Change out for display scripts?)
-		pancake = document.createElement('div');
-		pancake.id = "pancake";
-		pancake.setAttribute('data-current-side', 'bot');
-		pancake.setAttribute('data-cooked-top', '0');
-		pancake.setAttribute('data-cooked-bot', '0');
+		// Reset pancake object
+		pancake.currentSide = 'bot';
 
-		skillet.append(pancake);
-		pancake.addEventListener("click", pancakeFlip);
+		// Display pancake
 
 		skilletCooking = setInterval(pancakeCook, 1000);
 	}
@@ -132,37 +103,39 @@ function panFlip() {
 function panClear() {
 	clearInterval(skilletCooking);
 
-	const cookedBot = parseInt(pancake.getAttribute('data-cooked-bot'));
-	const cookedTop = parseInt(pancake.getAttribute('data-cooked-top'));
-
-	if ((cookedBot > pancakeGoldLower) && (pancakeGoldUpper > cookedBot)
-		&& ((cookedTop > pancakeGoldLower) && (pancakeGoldUpper > cookedTop))) {
+	if ((pancake.cookedBot > pancakeGoldLower) 
+			&& (pancakeGoldUpper > pancake.cookedBot)
+		&& ((pancake.cookedTop > pancakeGoldLower)
+			&& (pancakeGoldUpper > pancake.cookedTop))
+		) {
 			pancakeTally += 1;
 			tally.innerText = pancakeTally;
 		}
 	
-	pancake.remove();
+	// Reset pancake object
+	pancake = {
+		currentSide: '',
+		cookedBot: 0,
+		cookedTop: 0
+	}
 }
 
 function pancakeFlip() {
 	if (toolCheck('spatula', 1)) {
-		const currentSide = pancake.getAttribute('data-current-side');
-
-		if (currentSide == 'bot')
+		if (pancake.currentSide == 'bot')
 			panFlip();
-		else
+		else if (pancake.currentSide == 'top')
 			panClear();
 	}
 }
 
 function pancakeCook() {
-	const currentSide = pancake.getAttribute('data-current-side');
 	let currentTime;
 
-	if (currentSide == 'bot')
-		currentTime = parseInt(pancake.getAttribute('data-cooked-bot'));
-	else
-		currentTime = parseInt(pancake.getAttribute('data-cooked-top'));
+	if (pancake.currentSide == 'bot')
+		currentTime = pancake.cookedBot;
+	else if (pancake.currentSide == 'top')
+		currentTime = pancake.cookedTop;
 
 	// Exponentiate the rate of cooking if the user isn't interacting with stove
 	// (Remember: All time is given in milliseconds)
@@ -175,17 +148,8 @@ function pancakeCook() {
 			currentTime += currentTime;
 	currentTime = clamp(currentTime, 0, pancakeMaxTime);
 
-	if (currentSide == 'bot')
-		pancake.setAttribute('data-cooked-bot', currentTime);
-	else
-		pancake.setAttribute('data-cooked-top', currentTime);
+	if (pancake.currentSide == 'bot')
+		pancake.cookedBot = currentTime;
+	else if (pancake.currentSide == 'top')
+		pancake.cookedTop = currentTime;
 }
-
-
-
-spatula.addEventListener('click', spatulaClick);
-ladel.addEventListener('click', ladelClick);
-batter.addEventListener('click', batterClick);
-
-skillet.addEventListener("click", panFill);
-stove.addEventListener('click', stoveClick);

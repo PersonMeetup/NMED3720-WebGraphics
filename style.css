@@ -1,3 +1,13 @@
+html {
+	overflow: hidden;
+	height: 100%;
+}
+
+body {
+	height: 100%;
+	overflow: auto;
+}
+
 #game {
 	position: relative;
 }
@@ -24,4 +34,22 @@
 	flex: none;
 	width: 6rem; height: 6rem;
 	background-color: #e69f66;
+}
+
+#tool {
+	width: 150px;
+	z-index: 9999;
+	pointer-events: none;
+
+	/* Don't let the cursor drag the image! */
+	user-drag: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.nocursor {
+	cursor: none !important;
 }

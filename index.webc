@@ -15,9 +15,7 @@
 		<div id="game"></div>
 		<div>
 			<button id="spatula">Spatula Unequipped</button>
-			<button id="ladel">Ladel Unequipped</button>
-			<div id="batter"></div>
-			<div id="skillet"></div>
+			<button id="ladle">Ladle Unequipped</button>
 			<button id="stove">Pretend This Is A Stove</button>
 		</div>
 	</main>
