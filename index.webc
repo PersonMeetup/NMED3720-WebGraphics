@@ -9,15 +9,19 @@
 	<style @raw="getBundle('css')" webc:keep></style>
 </head>
 <body>
-	<h1>Hello, world!</h1>
+	<h1>Burnt Yet Doughy</h1>
 	<main>
-		<p>Total Pancakes: <span id="tally">0</span></p>
+		<p>Edible Pancakes: <span id="tally">0</span></p>
 		<div id="game"></div>
-		<div>
-			<button id="spatula">Spatula Unequipped</button>
-			<button id="ladle">Ladle Unequipped</button>
-			<button id="stove">Pretend This Is A Stove</button>
-		</div>
+		<section>
+			<h2>Instructions</h2>
+			<ul>
+				<li>Equip tools by clicking on them</li>
+				<li>Use your tools to cook some pancakes</li>
+				<li>Remember to keep track of time!</li>
+				<li>Please don't bang the stove too hard</li>
+			</ul>
+		</section>
 	</main>
 	<script src="pancakes.js"></script>
 	<script src="draw.js"></script>

@@ -10,6 +10,7 @@ const tally = document.getElementById('tally');
 const pancakeMaxTime = 3000;
 const pancakeGoldUpper = 2000;
 const pancakeGoldLower = 1200;
+const pancakeBatter = 85;
 
 let skilletCooking, stoveWaiting;
 let stoveClicked = false;
@@ -78,6 +79,9 @@ function panFill() {
 		pancake.currentSide = 'bot';
 
 		// Display pancake
+		colorMode(HSL, 100);
+		actionShapes.push(new Pancake(675, 500, 90, color(9, 90, pancakeBatter)));
+		colorMode(RGB, 255);
 
 		skilletCooking = setInterval(pancakeCook, 1000);
 	}
@@ -88,14 +92,17 @@ function panFlip() {
 	clearTimeout(stoveWaiting);
 	stoveClicked = false;
 
-	const currentSide = pancake.getAttribute('data-current-side');
-
-	if (currentSide == 'bot')
-		pancake.setAttribute('data-current-side', 'top');
+	if (pancake.currentSide == 'bot')
+		pancake.currentSide = 'top';
 	else
-		pancake.setAttribute('data-current-side', 'bot');
+		pancake.currentSide = 'bot';
 
 	// Trigger animation
+	colorMode(HSL, 100);
+	actionShapes.at(-1).color = color(9, 90, pancakeBatter - (
+		pancakeBatter * (pancake.cookedBot / pancakeMaxTime)
+	));
+	colorMode(RGB, 255);
 
 	skilletCooking = setInterval(pancakeCook, 1000);
 }
@@ -108,9 +115,11 @@ function panClear() {
 		&& ((pancake.cookedTop > pancakeGoldLower)
 			&& (pancakeGoldUpper > pancake.cookedTop))
 		) {
-			pancakeTally += 1;
-			tally.innerText = pancakeTally;
-		}
+		pancakeTally += 1;
+		tally.innerText = pancakeTally;
+	}
+
+	actionShapes.length -= 1;
 	
 	// Reset pancake object
 	pancake = {

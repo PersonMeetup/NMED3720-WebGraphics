@@ -1,19 +1,18 @@
 class Shape {
-    constructor(x, y, width, height) {
+    constructor(x, y, r, color) {
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
+        this.r = r;
+        this.color = color;
     }
 
     display() {
-        fill('#ff604b');
-        rect(this.x, this.y, this.width, this.height);
+        fill(this.color);
+        ellipse(this.x, this.y, this.r);
     }
 
     click(px, py) {
-        if (((px > this.x) && (px < (this.x + this.width)))
-            && ((py > this.y) && (py < (this.y + this.height)))) {
+        if (dist(px, py, this.x, this.y) < this.r) {
             this.event();
             // return true;
         }
@@ -70,10 +69,6 @@ class Tool {
 }
 
 class Batter extends Shape {
-    display() {
-        fill('#e2bea0');
-        ellipse(this.x, this.y, this.width, this.height);
-    }
     event() {
         if (equip('ladle', 2)) {
             if (userState.ladle == 2)
@@ -85,24 +80,25 @@ class Batter extends Shape {
 }
 
 class Skillet extends Shape {
-    display() {
-        fill('#b0b4b5');
-        rect(this.x, this.y, this.width, this.height);
-    }
     event() {
         panFill();
     }
 }
 
 class Stove extends Shape {
-    display() {
-        fill('#2b2b2b');
-        rect(this.x, this.y, this.width, this.height);
-    }
     event() {
         stoveClick();
     }
 }
+
+class Pancake extends Shape {
+    event() {
+        pancakeFlip();
+    }
+}
+
+const width = 720;
+const height = width * 4 / 3;
 
 let equipped, actionShapes;
 
@@ -132,9 +128,11 @@ function equipImage(tool) {
 }
 
 function setup() {
-    let render = createCanvas(960, 720);
+    let render = createCanvas(height, width);
     render.parent('#game');
     render.id('render')
+
+    ellipseMode(RADIUS);
 
     /**
      * ORDER OF RENDER PRIORITY:
@@ -142,11 +140,12 @@ function setup() {
      * Spatula > Ladle > Batter > Skillet > Stove
      */
     actionShapes = [
-        new Stove(125, 40, 320, 100),
-        new Skillet(200, 50, 160, 80),
-        new Batter(50, 175, 80, 100),
-        new Tool(125, 325, 4, 'spatula'),
-        new Tool(350, 325, 4, 'ladle'),
+        new Stove(675, 500, 175, '#2b2b2b'),
+        new Stove(675, 125, 110, '#2b2b2b'),
+        new Skillet(675, 500, 160, '#b0b4b5'),
+        new Batter(250, 250, 100, '#e2bea0'),
+        new Tool(85, 425, 4, 'spatula'),
+        new Tool(50, 25, 4, 'ladle'),
     ];
 
     background(135);
@@ -165,6 +164,14 @@ function mouseMoved() {
 
 function draw() {
     background(135);
+
+    // Counter Top
+    fill('#9d5951');
+    rect(0, 0, 400, height);
+
+    // Stove Body
+    fill('#e8e6e1');
+    rect(430, 0, width, height);
 
     for (const shape of actionShapes) {
         if (shape instanceof Tool)
