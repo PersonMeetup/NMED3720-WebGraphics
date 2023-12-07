@@ -31,8 +31,8 @@ class Tool {
         this.shrink = shrink;
         this.tool = tool;
         this.img = {
-            rest: loadImage(`/img/${tool}.png`),
-            use: loadImage(`/img/${tool}-use.png`)
+            rest: loadImage(`./img/${tool}.png`),
+            use: loadImage(`./img/${tool}-use.png`)
         }
     }
 
@@ -111,13 +111,13 @@ function equipImage(tool) {
     else {
         switch (tool) {
             case 'spatula':
-                equipped = createImg('/img/spatula.png', 'Carrying Spatula');
+                equipped = createImg('./img/spatula.png', 'Carrying Spatula');
                 break;
             case 'ladle':
-                equipped = createImg('/img/ladle.png', 'Carrying Ladle');
+                equipped = createImg('./img/ladle.png', 'Carrying Ladle');
                 break;
             case 'batter':
-                equipped = createImg('/img/batter.png', 'Carrying Ladle Filled with Batter');
+                equipped = createImg('./img/batter.png', 'Carrying Ladle Filled with Batter');
                 break;
         }
         equipped.id('tool');
